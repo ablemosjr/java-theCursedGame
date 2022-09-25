@@ -1,33 +1,53 @@
 package model;
 
+import java.util.Random;
+
 /** Classe de construção dos personagens
  * 
  * Atributos:
  * - Nome
  * - Vida
- * - Nível de experiência
+ * - Nível
+ * - Quantidade de experiência
+ * - Esquiva
  * 
  * @since 22/09/2022
  * @author Alessandro Bonfilio de Lemos Junior - RA 1601018
  */
 
-public class Characters {
+public abstract class Characters {
     
     private String name;
-    private double vitality;
-    private double level;
-    private double dodge;
+    private float vitality;
+    private int level;
+    private float exp;
+    private float expGain;
+    private float dodge;
 
     public Characters() {
     }
 
-    public Characters(String name, double vitality, double dodge) {
+    public Characters(String name, float vitality, float dodge) {
         this.name = name;
         this.vitality = vitality;
         this.level = 1;
+        this.exp = 10;
         this.dodge = dodge;
+        this.expGain = 0;
     }
-
+    
+    abstract float attack();
+    abstract float hurt(int dmg);
+    abstract float rest();
+    abstract boolean perish();
+    
+    protected int hitCalculation() {
+        Random hitCalculation = new Random();
+        
+        int hit = hitCalculation.nextInt(50) + 1;
+        return hit;
+    }
+    
     public String getName() {
         return name;
     }
@@ -60,12 +80,31 @@ public class Characters {
         this.dodge = dodge;
     }
 
+    public double getExp() {
+        return exp;
+    }
+
+    public void setExp(float exp) {
+        this.exp = exp;
+    }
+
+    public float getExpGain() {
+        return expGain;
+    }
+
+    public void setExpGain(float expGain) {
+        this.expGain = expGain;
+    }
+
     @Override
     public String toString() {
         return "Personagens {" + 
-                "\nname= " + name + 
-                "\nvitality= " + vitality + 
-                "\nlevel= " + level + 
+                "\nname = " + this.name + 
+                "\nvitality = " + this.vitality + 
+                "\nlevel = " + this.level + 
+                "\nexp = " + this.exp + 
+                "\nexp gain = " + this.expGain + 
+                "\ndodge = " + this.dodge + 
                 "\n}";
     }
 }
