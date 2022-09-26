@@ -19,27 +19,35 @@ public abstract class Characters {
     
     private String name;
     private float vitality;
+    private float hpLoss;
     private int level;
     private float exp;
     private float expGain;
     private float dodge;
+    private String race;
 
     public Characters() {
     }
 
-    public Characters(String name, float vitality, float dodge) {
+    public Characters(String name, float vitality, float dodge, String race) {
         this.name = name;
         this.vitality = vitality;
+        this.hpLoss = vitality;
         this.level = 1;
         this.exp = 10;
         this.dodge = dodge;
         this.expGain = 0;
+        this.race = race;
     }
     
-    abstract float attack();
-    abstract float hurt(int dmg);
-    abstract float rest();
-    abstract boolean perish();
+    public abstract float attack();
+    public abstract float hurt(int dmg);
+    public abstract float rest();
+    
+    public boolean perish(float hpLoss) {
+        boolean lifeOrDeath = hpLoss > 0 ? true : false;
+        return lifeOrDeath;
+    }
     
     protected int hitCalculation() {
         Random hitCalculation = new Random();
@@ -56,7 +64,7 @@ public abstract class Characters {
         this.name = name;
     }
 
-    public double getVitality() {
+    public float getVitality() {
         return vitality;
     }
 
@@ -64,7 +72,7 @@ public abstract class Characters {
         this.vitality = vitality;
     }
 
-    public double getLevel() {
+    public float getLevel() {
         return level;
     }
 
@@ -72,7 +80,7 @@ public abstract class Characters {
         this.level = level;
     }
 
-    public double getDodge() {
+    public float getDodge() {
         return dodge;
     }
 
@@ -80,7 +88,7 @@ public abstract class Characters {
         this.dodge = dodge;
     }
 
-    public double getExp() {
+    public float getExp() {
         return exp;
     }
 
@@ -92,10 +100,26 @@ public abstract class Characters {
         return expGain;
     }
 
-    public void setExpGain(float expGain) {
+    public void setExpGain(int expGain) {
         this.expGain = expGain;
     }
 
+    public String getRace() {
+        return race;
+    }
+
+    public void setRace(String race) {
+        this.race = race;
+    }
+
+    public float getHpLoss() {
+        return hpLoss;
+    }
+
+    public void setHpLoss(float hpLoss) {
+        this.hpLoss = hpLoss;
+    }
+    
     @Override
     public String toString() {
         return "Personagens {" + 

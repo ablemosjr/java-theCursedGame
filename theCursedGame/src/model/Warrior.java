@@ -12,13 +12,13 @@ package model;
 public class Warrior extends Characters {
     
     private float strength;
-
+    
     public Warrior(String name) {
-        super(name, 50, 10);
+        super(name, 50, 10, "Guerreiro");
         this.strength = 10;
     }
     
-    public double getStrength() {
+    public float getStrength() {
         return strength;
     }
 
@@ -32,6 +32,7 @@ public class Warrior extends Characters {
         "\nname = " + getName() +
         "\nvitality = " + getVitality() +
         "\nlevel = " + getLevel() +
+        "\nrace = " + getRace() +
         "\nexp = " + getExp() +
         "\nexp gain = " + getExpGain() +
         "\nstrength = " + this.strength +
@@ -40,12 +41,12 @@ public class Warrior extends Characters {
     }
 
     @Override
-    float attack() {
-        return this.strength;
+    public float attack() {
+        return (int) this.strength;
     }
 
     @Override
-    float hurt(int dmg) {
+    public float hurt(int dmg) {
         int dodge = (int) (getDodge() * 0.50);
         
         if(hitCalculation() < dodge) {
@@ -59,12 +60,7 @@ public class Warrior extends Characters {
     }
 
     @Override
-    float rest() {
-        return this.strength / 2;
-    }
-
-    @Override
-    boolean perish() {
-        return getVitality() == 0 ? true : false;
+    public float rest() {
+        return (float) (this.strength * 0.80);
     }
 }

@@ -13,15 +13,15 @@ package model;
 public class Mage extends Characters {
     
     private float wisdom;
-    private float healing;
+    private float inteligence;
 
     public Mage(String name) {
-        super(name, 20, 5);
+        super(name, 20, 5, "Mago");
         this.wisdom = 30;
-        this.healing = 10;
+        this.inteligence = 10;
     }
 
-    public double getWisdom() {
+    public float getWisdom() {
         return wisdom;
     }
 
@@ -29,12 +29,12 @@ public class Mage extends Characters {
         this.wisdom = wisdom;
     }
 
-    public double getHealing() {
-        return healing;
+    public float getInteligence() {
+        return inteligence;
     }
 
-    public void setHealing(int healing) {
-        this.healing = healing;
+    public void setInteligence(int inteligence) {
+        this.inteligence = inteligence;
     }
 
     @Override
@@ -43,21 +43,22 @@ public class Mage extends Characters {
         "\nname = " + getName() +
         "\nvitality = " + getVitality() +
         "\nlevel = " + getLevel() +
+        "\nrace = " + getRace() +
         "\nexp = " + getExp() +
         "\nexp gain = " + getExpGain() +
         "\nwisdom = " + this.wisdom +
-        "\nhealing = " + this.healing +
+        "\nhealing = " + this.inteligence +
         "\ndodge = " + getDodge() +
         "\n}";
     }
 
     @Override
-    float attack() {
-        return (float) (this.wisdom * 0.80);
+    public float attack() {
+        return (int) ((this.wisdom * 0.60) + (this.inteligence * 0.20));
     }
 
     @Override
-    float hurt(int dmg) {  
+    public float hurt(int dmg) {  
         int dodge = (int) (getDodge() * 0.50);
         
         if(hitCalculation() < dodge) {
@@ -71,12 +72,7 @@ public class Mage extends Characters {
     }
 
     @Override
-    float rest() {
-        return (float) (this.healing + (getDodge() * 0.10));
-    }
-
-    @Override
-    boolean perish() {
-        return getVitality() == 0 ? true : false;
+    public float rest() {
+        return (float) (this.inteligence + (getDodge() * 0.10));
     }
 }

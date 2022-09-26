@@ -14,11 +14,11 @@ public class Archer extends Characters {
     private float agility;
 
     public Archer(String name) {
-        super(name, 30, 20);
+        super(name, 30, 20, "Arqueiro");
         this.agility = 30;
     }
 
-    public double getAgility() {
+    public float getAgility() {
         return agility;
     }
 
@@ -32,6 +32,7 @@ public class Archer extends Characters {
         "\nname = " + getName() +
         "\nvitality = " + getVitality()+
         "\nlevel = " + getLevel()+
+        "\nrace = " + getRace() +
         "\nexp = " + getExp() +
         "\nexp gain = " + getExpGain() +
         "\nagility = " + this.agility +
@@ -40,12 +41,12 @@ public class Archer extends Characters {
 }
 
     @Override
-    float attack() {
-        return (float) (this.agility * 0.60);
+    public float attack() {
+        return (int) (this.agility * 0.60);
     }
 
     @Override
-    float hurt(int dmg) {
+    public float hurt(int dmg) {
         int dodge = (int) ((this.agility * 0.40) + (getDodge() + 0.10));
         
         if(hitCalculation() < dodge) {
@@ -59,12 +60,7 @@ public class Archer extends Characters {
     }
 
     @Override
-    float rest() {
-        return (float) (this.agility * (getDodge() * 0.30));
-    }
-
-    @Override
-    boolean perish() {
-        return getVitality() == 0 ? true : false;
+    public float rest() {
+        return (float) ((this.agility * 0.2) + (getDodge() * 0.30));
     }
 }

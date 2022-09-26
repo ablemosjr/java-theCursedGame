@@ -1,10 +1,5 @@
 package main;
 
-import model.Archer;
-import model.Mage;
-import model.Monsters;
-import model.Warrior;
-
 /** AS014TSN1 - Programação Orientada à Objetos
  * AC1 (Lista) - Personagens
  * Uma desenvolvedora da games está trabalhando em um jogo de RPG. 
@@ -28,7 +23,7 @@ import model.Warrior;
  * (1.0) Encapsulamento bem feito.
  * (0.5) Crie instancias dessas classes e altere seus dados e teste seus métodos.
  * (0.5) Validações quando necessárias.
- * (Opcional) Faça um personagem atacar outro.
+ * (Opcional) Faça um personagem atacar outro.1
  * 
  * @author Alessandro Bonfilio de Lemos Junior - RA 1601018
  * @since 22/09/2022
@@ -36,29 +31,7 @@ import model.Warrior;
 
 public class Menu {
     public static void main(String[] args) {
-        Warrior wr = new Warrior("Fred");
-        Mage mg = new Mage("Joy");
-        Archer ar = new Archer("Edu");
+        Game.gameView();
         
-        System.out.println(wr.toString());      
-        System.out.println("-------------");
-        System.out.println(mg.toString());
-        System.out.println("-------------");
-        System.out.println(ar.toString());
-        
-        System.out.println("\n");
-        
-        Monsters m = new Monsters();
-        Monsters m1 = new Monsters();
-        Monsters m2 = new Monsters();
-        
-        m.createMonsters();
-        System.out.println(m.toString());
-        
-        m1.createMonsters();
-        System.out.println(m1.toString());
-        
-        m2.createMonsters();
-        System.out.println(m2.toString());
     }
 }

@@ -4,7 +4,7 @@ import java.util.Random;
 
 /** Classe de construção de monstros 
  *
- * @since 22/09/2022
+ * @since 23/09/2022
  * @author Alessandro Bonfilio de Lemos Junior - RA 1601018
  */
 
@@ -12,13 +12,19 @@ public class Monsters {
     
     private String name;
     private float vitality;
+    private float hpLoss;
     private float strength;
     private float exp;
     
-    public Monsters() {       
+    public Monsters() { 
+        this.name = "";
+        this.vitality = 0;
+        this.hpLoss = 0;
+        this.strength = 0;
+        this.exp = 0;
     }
-    
-    public void createMonsters() {
+
+    public void createMonsters(int round) {
         Random randomMonster = new Random();
         int monster = randomMonster.nextInt(2) + 1;
         
@@ -26,16 +32,62 @@ public class Monsters {
             case 1:
                 setName("Goblin");
                 setVitality(30);
+                setHpLoss(getVitality());
                 setStrength(4);
                 setExp(8);
                 break;
             case 2:
                 setName("Orc");
                 setVitality(80);
+                setHpLoss(getVitality());
                 setStrength(5);
                 setExp(15);
                 break;
         }
+        
+        if(round != 1) {
+            int hpMonsterUp = (int) getVitality() + (round * 2);
+            int xpMonsterUp = (int) getExp() + (round * 2);
+            
+            setVitality(hpMonsterUp);
+            setHpLoss(hpMonsterUp);
+            setExp(xpMonsterUp);
+        }
+    }
+    
+    public int monsterAttack(Monsters monster) {
+        Random randomAttack = new Random();
+        int attack = randomAttack.nextInt(2) + 1;
+        int dmgCritic = (int) (monster.getStrength() * 2);
+
+        if(monster.getName().equals("Goblin")) {
+            switch (attack) {
+                case 1:
+                    System.out.println("Goblin atacou " + (int) monster.getStrength());
+                    return (int) monster.getStrength();
+                case 2:
+                    System.out.println("Goblin atacou e critou " + dmgCritic);
+                    return (int) dmgCritic;
+                default:
+                    throw new AssertionError();
+            }
+        } else if(monster.getName().equals("Orc")) {
+            switch (attack) {
+                case 1:
+                    System.out.println("Orc atacou " + (int) monster.getStrength());
+                    return (int) monster.getStrength();
+                case 2:
+                    System.out.println("Orc atacou e critou " + dmgCritic);
+                    return (int) dmgCritic;
+                default:
+                    throw new AssertionError();
+            }
+        }
+        return 0;
+    }
+    
+    public void monsterUp() {
+        
     }
 
     public String getName() {
@@ -68,6 +120,14 @@ public class Monsters {
 
     public void setExp(float exp) {
         this.exp = exp;
+    }
+
+    public float getHpLoss() {
+        return hpLoss;
+    }
+
+    public void setHpLoss(float hpLoss) {
+        this.hpLoss = hpLoss;
     }
 
     @Override
