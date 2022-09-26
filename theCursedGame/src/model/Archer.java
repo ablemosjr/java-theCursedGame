@@ -14,7 +14,7 @@ public class Archer extends Characters {
     private float agility;
 
     public Archer(String name) {
-        super(name, 30, 20, "Arqueiro");
+        super(name, 45, 20, "Arqueiro");
         this.agility = 30;
     }
 
@@ -46,11 +46,11 @@ public class Archer extends Characters {
     }
 
     @Override
-    public float hurt(int dmg) {
-        int dodge = (int) ((this.agility * 0.40) + (getDodge() + 0.10));
+    public float hurt(int dmg, String monsterName) {
+        int dodge = (int) ((this.agility * 0.30) + (getDodge() + 0.10));
         
         if(hitCalculation() < dodge) {
-            System.out.println("Errou.");
+            System.out.println("O [" + monsterName + "] errou o ataque.");
         }
         
         float def = (float) ((this.agility * 0.30) + (getDodge() * 0.10));
@@ -63,4 +63,35 @@ public class Archer extends Characters {
     public float rest() {
         return (float) ((this.agility * 0.2) + (getDodge() * 0.30));
     }
+
+    @Override
+    public void levelUp(int xp, int round) {
+        int upLv = (getLevel() + 1);
+        int dodgeUp = (int) (round / 2 + 1 + getDodge());
+        int agilityUp = (int) (round / 2 + 2 + getAgility());
+        int hpUp = (int) (round + 4 + getVitality());
+        int xpUp = (int) (round / 2 + 10 + getExp());
+        
+        if(xp > getExp()) {
+            int xpRemain  = (int) (getExpGain() - getExp());
+            
+            setExpGain(xpRemain);
+            setExp(xpUp);
+            setLevel(upLv);
+            setDodge(dodgeUp);
+            setAgility(agilityUp);
+            setVitality(hpUp);
+            setHpLoss(getVitality());
+            
+        } else if(xp == getExp()) {
+            setExpGain(0);
+            setExp(xpUp);
+            setLevel(upLv);
+            setDodge(dodgeUp);
+            setAgility(agilityUp);
+            setVitality(hpUp);
+            setHpLoss(getVitality());
+        }
+    }
+    
 }

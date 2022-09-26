@@ -16,7 +16,7 @@ public class Mage extends Characters {
     private float inteligence;
 
     public Mage(String name) {
-        super(name, 20, 5, "Mago");
+        super(name, 40, 5, "Mago");
         this.wisdom = 30;
         this.inteligence = 10;
     }
@@ -58,11 +58,11 @@ public class Mage extends Characters {
     }
 
     @Override
-    public float hurt(int dmg) {  
-        int dodge = (int) (getDodge() * 0.50);
+    public float hurt(int dmg, String monsterName) {  
+        int dodge = (int) (getDodge() * 0.30);
         
         if(hitCalculation() < dodge) {
-            System.out.println("Errou.");
+            System.out.println("O [" + monsterName + "] errou o ataque.");
         }
         
         float def = (float) ((this.wisdom * 0.10) + (getDodge() * 0.50));
@@ -75,4 +75,38 @@ public class Mage extends Characters {
     public float rest() {
         return (float) (this.inteligence + (getDodge() * 0.10));
     }
+
+    @Override
+    public void levelUp(int xp, int round) {
+        int upLv = (getLevel() + 1);
+        int dodgeUp = (int) (round / 2 + getDodge());
+        int wisdomUp = (int) (round / 2 + 2 + getWisdom());
+        int inteligenceUp = (int) (round / 2 + 1 + getInteligence());
+        int hpUp = (int) (round + 3 + getVitality());
+        int xpUp = (int) (round / 2 + 10 + getExp());
+        
+        if(xp > getExp()) {
+            int xpRemain  = (int) (getExpGain() - getExp());
+            
+            setExpGain(xpRemain);
+            setExp(xpUp);
+            setLevel(upLv);
+            setDodge(dodgeUp);
+            setWisdom(wisdomUp);
+            setInteligence(inteligenceUp);
+            setVitality(hpUp);
+            setHpLoss(getVitality());
+            
+        } else if(xp == getExp()) {
+            setExpGain(0);
+            setExp(xpUp);
+            setLevel(upLv);
+            setDodge(dodgeUp);
+            setWisdom(wisdomUp);
+            setInteligence(inteligenceUp);
+            setVitality(hpUp);
+            setHpLoss(getVitality());
+        }
+    }
+    
 }

@@ -1,9 +1,7 @@
 package main;
 
-import java.util.Random;
 import java.util.Scanner;
 import model.Archer;
-import model.Characters;
 import model.Mage;
 import model.Monsters;
 import model.Warrior;
@@ -24,9 +22,9 @@ public class Game {
         System.out.println("===========================================================\n");
         
         System.out.println("Escolha seu personagem:\n");
-        System.out.println("[1] - Guerreiro [50 HP / 10 STR / 10 DODGE]");
-        System.out.println("[2] - Mago      [20 HP / 30 WIS / 5 DODGE / 10 HEALING]");
-        System.out.println("[3] - Arqueiro  [30 HP / 30 AGI / 20 DODGE]");
+        System.out.println("[1] - Guerreiro [70 HP / 10 STR / 10 DODGE]");
+        System.out.println("[2] - Mago      [40 HP / 30 WIS / 5 DODGE / 10 HEALING]");
+        System.out.println("[3] - Arqueiro  [45 HP / 30 AGI / 20 DODGE]");
         System.out.println("Opção: ");
         
         return sc.nextInt();
@@ -44,9 +42,9 @@ public class Game {
         Mage mage = new Mage(name);
         Archer archer = new Archer(name);
 
-        battle(warrior, mage, archer, choice);
+        int score = battle(warrior, mage, archer, choice);
         
-        return 0;
+        return score;
     }
     
     private static int battle(Warrior warrior, Mage mage, Archer archer, int choice) {
@@ -64,6 +62,7 @@ public class Game {
                 
                 int chosenSkill = playerSkill(choice);
                 
+                System.out.println("-----------------------------------------------------------");
                 switch (choice) {
                     case 1:
                         switch (chosenSkill) {
@@ -167,23 +166,46 @@ public class Game {
                         System.out.println("Opção inválida");
                         break;
                 }
+                
             if(monster.getHpLoss() > 0) {
+                int dmg = monster.monsterAttack(monster);
                 switch (choice) {
                     case 1:
-                        warrior.setHpLoss(warrior.getHpLoss() - monster.monsterAttack(monster));
+                        warrior.setHpLoss(warrior.getHpLoss() - warrior.hurt(dmg, monster.getName()));
                         break;
                     case 2:
-                        mage.setHpLoss(mage.getHpLoss() - monster.monsterAttack(monster));
+                        mage.setHpLoss(mage.getHpLoss() - (int) mage.hurt(dmg, monster.getName()));
                         break;
                     case 3:
-                        archer.setHpLoss(archer.getHpLoss() - monster.monsterAttack(monster));
+                        archer.setHpLoss(archer.getHpLoss() - (int) archer.hurt(dmg, monster.getName()));
                         break;
                     default:
                         throw new AssertionError();
                     }
                 } else {
-                    System.out.println("Inimigo derrotado!");
+                    switch (choice) {
+                        case 1:
+                            int warriorXp = (int) (warrior.getExpGain() + monster.getExp());
+                            warrior.setExpGain(warriorXp);
+                            break;
+                        case 2:
+                            int mageXp = (int) (mage.getExpGain() + monster.getExp());
+                            mage.setExpGain(mageXp);
+                            break;
+                        case 3:
+                            int archerXp = (int) (archer.getExpGain() + monster.getExp());
+                            archer.setExpGain(archerXp);
+                            break;
+                        default:
+                            throw new AssertionError();
+                    }
+
+                    System.out.println("[" + monster.getName() + "] derrotado!");
+
+                    playerUp(warrior, mage, archer, choice, round);
                 }
+            
+                System.out.println("-----------------------------------------------------------");
             }
             round++;
         }
@@ -212,7 +234,6 @@ public class Game {
                         "\nLevel: " + warrior.getLevel() + "\t XP: " + warrior.getExpGain() + " / "+ warrior.getExp() +
                         "\nEsquiva: " + warrior.getDodge() +
                         "\nFor: " + warrior.getStrength());
-                System.out.println("-----------------------------------------------------------");
                 break;
             case 2:
                 System.out.println("========================JOGADOR============================");
@@ -222,7 +243,6 @@ public class Game {
                         "\nEsquiva: " + mage.getDodge() +
                         "\nWis: " + mage.getWisdom() + 
                         "\nInt: " + mage.getInteligence());
-                System.out.println("-----------------------------------------------------------");
                 break;
             case 3:
                 System.out.println("========================JOGADOR============================");
@@ -231,7 +251,6 @@ public class Game {
                         "\nLevel: " + archer.getLevel() + "\t XP: " + archer.getExpGain() + " / "+ archer.getExp() +
                         "\nEsquiva: " + archer.getDodge() +
                         "\nFor: " + archer.getAgility());
-                System.out.println("-----------------------------------------------------------");
                 break;
             default:
                 throw new AssertionError();
@@ -244,7 +263,6 @@ public class Game {
         System.out.println("Monstro: " + monster.getName() +
                 "\nHP: " + monster.getHpLoss() + " / " + monster.getVitality() + 
                 "\nXP Obtida: " + monster.getExp());
-        System.out.println("-----------------------------------------------------------");
     }
     
     private static int playerSkill(int choice) {
@@ -279,4 +297,26 @@ public class Game {
         return 0;
     }
  
+    private static void playerUp(Warrior warrior, Mage mage, Archer archer, int choice, int round) {
+        System.out.println("***********************************************************");
+
+        switch (choice) {
+            case 1:
+                warrior.levelUp((int) warrior.getExpGain(), round);
+                System.out.println("\t\tSeu [" + warrior.getRace() + "] avançou de level");
+                break;
+            case 2:
+                mage.levelUp((int) mage.getExpGain(), round);
+                System.out.println("\t\tSeu [" + mage.getRace() + "] avançou de level");
+                break;
+            case 3:
+                archer.levelUp((int) archer.getExpGain(), round);
+                System.out.println("\t\tSeu [" + archer.getRace() + "] avançou de level");
+                break;
+            default:
+                throw new AssertionError();
+        }
+        System.out.println("***********************************************************");
+    }
+    
 }

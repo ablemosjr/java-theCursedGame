@@ -10,6 +10,7 @@ import java.util.Random;
  * - Nível
  * - Quantidade de experiência
  * - Esquiva
+ * - Raça
  * 
  * @since 22/09/2022
  * @author Alessandro Bonfilio de Lemos Junior - RA 1601018
@@ -41,8 +42,9 @@ public abstract class Characters {
     }
     
     public abstract float attack();
-    public abstract float hurt(int dmg);
+    public abstract float hurt(int dmg, String monsterName);
     public abstract float rest();
+    public abstract void levelUp(int xp, int round);
     
     public boolean perish(float hpLoss) {
         boolean lifeOrDeath = hpLoss > 0 ? true : false;
@@ -72,7 +74,7 @@ public abstract class Characters {
         this.vitality = vitality;
     }
 
-    public float getLevel() {
+    public int getLevel() {
         return level;
     }
 
