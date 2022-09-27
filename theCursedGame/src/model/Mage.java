@@ -17,7 +17,7 @@ public class Mage extends Characters {
 
     public Mage(String name) {
         super(name, 40, 5, "Mago");
-        this.wisdom = 30;
+        this.wisdom = 25;
         this.inteligence = 10;
     }
 
@@ -54,21 +54,19 @@ public class Mage extends Characters {
 
     @Override
     public float attack() {
-        return (int) ((this.wisdom * 0.60) + (this.inteligence * 0.20));
+        return (int) ((this.wisdom * 0.50) + (this.inteligence * 0.20));
     }
 
     @Override
-    public float hurt(int dmg, String monsterName) {  
+    public void hurt(Monsters monster) {
         int dodge = (int) (getDodge() * 0.30);
         
         if(hitCalculation() < dodge) {
-            System.out.println("O [" + monsterName + "] errou o ataque.");
+            System.out.println("O [" + monster.getName() + "] errou o ataque.");
+        } else {
+            int dmg = monster.monsterAttack(monster);
+            setHpLoss(getHpLoss() - dmg);
         }
-        
-        float def = (float) ((this.wisdom * 0.10) + (getDodge() * 0.50));
-        float lifeCalculation = dmg - def;
-        
-        return lifeCalculation;
     }
 
     @Override
@@ -97,6 +95,10 @@ public class Mage extends Characters {
             setVitality(hpUp);
             setHpLoss(getVitality());
             
+            System.out.println("***********************************************************");
+            System.out.println("\t\tSeu [" + getRace() + "] avançou de level");
+            System.out.println("***********************************************************");
+            
         } else if(xp == getExp()) {
             setExpGain(0);
             setExp(xpUp);
@@ -106,6 +108,10 @@ public class Mage extends Characters {
             setInteligence(inteligenceUp);
             setVitality(hpUp);
             setHpLoss(getVitality());
+            
+            System.out.println("***********************************************************");
+            System.out.println("\t\tSeu [" + getRace() + "] avançou de level");
+            System.out.println("***********************************************************");
         }
     }
     

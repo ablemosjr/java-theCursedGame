@@ -42,7 +42,7 @@ public abstract class Characters {
     }
     
     public abstract float attack();
-    public abstract float hurt(int dmg, String monsterName);
+    public abstract void hurt(Monsters monster);
     public abstract float rest();
     public abstract void levelUp(int xp, int round);
     

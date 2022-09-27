@@ -45,10 +45,10 @@ public class Monsters {
                 break;
         }
         
-        if(round != 1) {
-            int hpMonsterUp = (int) getVitality() + (round * 2);
+        if(round > 1) {
+            int hpMonsterUp = (int) getVitality() + (round * 2 + 4);
             int xpMonsterUp = (int) getExp() + (round * 2);
-            int strMonsterUp = (int) (getStrength() + round / 2);
+            int strMonsterUp = (int) (getStrength() + round / 2 + 2);
             
             setVitality(hpMonsterUp);
             setHpLoss(hpMonsterUp);
@@ -61,7 +61,7 @@ public class Monsters {
         Random randomAttack = new Random();
         int attack = randomAttack.nextInt(2) + 1;
         int dmgCritic = (int) (monster.getStrength() * 2);
-
+ 
         if(monster.getName().equals("Goblin")) {
             switch (attack) {
                 case 1:
@@ -88,10 +88,6 @@ public class Monsters {
         return 0;
     }
     
-    public void monsterUp() {
-        
-    }
-
     public String getName() {
         return name;
     }

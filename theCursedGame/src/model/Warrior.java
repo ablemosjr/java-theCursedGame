@@ -46,16 +46,15 @@ public class Warrior extends Characters {
     }
 
     @Override
-    public float hurt(int dmg, String monsterName) {
-        int dodge = (int) (getDodge() * 0.30);
+    public void hurt(Monsters monster) {
+        int dodge = (int) (getDodge() * 0.40);
         
         if(hitCalculation() < dodge) {
-            System.out.println("O [" + monsterName + "] errou o ataque.");
+            System.out.println("O [" + monster.getName() + "] errou o ataque.");
+        } else {
+            int dmg = monster.monsterAttack(monster);
+            setHpLoss(getHpLoss() - dmg);
         }
-        
-        float lifeCalculation = dmg;
-
-        return (int) lifeCalculation;
     }
 
     @Override
@@ -82,6 +81,10 @@ public class Warrior extends Characters {
             setVitality(hpUp);
             setHpLoss(getVitality());
             
+            System.out.println("***********************************************************");
+            System.out.println("\t\tSeu [" + getRace() + "] avançou de level");
+            System.out.println("***********************************************************");
+            
         } else if(getExpGain() == getExp()) {
             setExpGain(0);
             setExp(xpUp);
@@ -90,6 +93,10 @@ public class Warrior extends Characters {
             setStrength(strengthUp);
             setVitality(hpUp);
             setHpLoss(getVitality());
+            
+            System.out.println("***********************************************************");
+            System.out.println("\t\tSeu [" + getRace() + "] avançou de level");
+            System.out.println("***********************************************************");
         }
     }  
     

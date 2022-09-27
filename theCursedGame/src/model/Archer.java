@@ -15,7 +15,7 @@ public class Archer extends Characters {
 
     public Archer(String name) {
         super(name, 45, 20, "Arqueiro");
-        this.agility = 30;
+        this.agility = 20;
     }
 
     public float getAgility() {
@@ -42,21 +42,19 @@ public class Archer extends Characters {
 
     @Override
     public float attack() {
-        return (int) (this.agility * 0.60);
+        return (int) (this.agility * 0.70);
     }
 
     @Override
-    public float hurt(int dmg, String monsterName) {
+    public void hurt(Monsters monster) {
         int dodge = (int) ((this.agility * 0.30) + (getDodge() + 0.10));
         
         if(hitCalculation() < dodge) {
-            System.out.println("O [" + monsterName + "] errou o ataque.");
+            System.out.println("O [" + monster.getName() + "] errou o ataque.");
+        } else {
+            int dmg = monster.monsterAttack(monster);
+            setHpLoss(getHpLoss() - dmg);
         }
-        
-        float def = (float) ((this.agility * 0.30) + (getDodge() * 0.10));
-        float lifeCalculation = dmg - def;
-        
-        return lifeCalculation;
     }
 
     @Override
@@ -83,6 +81,10 @@ public class Archer extends Characters {
             setVitality(hpUp);
             setHpLoss(getVitality());
             
+            System.out.println("***********************************************************");
+            System.out.println("\t\tSeu [" + getRace() + "] avançou de level");
+            System.out.println("***********************************************************");
+            
         } else if(xp == getExp()) {
             setExpGain(0);
             setExp(xpUp);
@@ -91,6 +93,10 @@ public class Archer extends Characters {
             setAgility(agilityUp);
             setVitality(hpUp);
             setHpLoss(getVitality());
+            
+            System.out.println("***********************************************************");
+            System.out.println("\t\tSeu [" + getRace() + "] avançou de level");
+            System.out.println("***********************************************************");
         }
     }
     
