@@ -14,7 +14,7 @@ public class Warrior extends Characters {
     private float strength;
     
     public Warrior(String name) {
-        super(name, 50, 10, "Guerreiro");
+        super(name, 70, 10, "Guerreiro");
         this.strength = 10;
     }
     
@@ -46,21 +46,58 @@ public class Warrior extends Characters {
     }
 
     @Override
-    public float hurt(int dmg) {
-        int dodge = (int) (getDodge() * 0.50);
+    public void hurt(Monsters monster) {
+        int dodge = (int) (getDodge() * 0.40);
         
         if(hitCalculation() < dodge) {
-            System.out.println("Errou.");
+            System.out.println("O [" + monster.getName() + "] errou o ataque.");
+        } else {
+            int dmg = monster.monsterAttack(monster);
+            setHpLoss(getHpLoss() - dmg);
         }
-
-        float def = (float) (this.strength + (getDodge() * 0.50));
-        float lifeCalculation = dmg - def;
-
-        return lifeCalculation;
     }
 
     @Override
     public float rest() {
         return (float) (this.strength * 0.80);
     }
+
+    @Override
+    public void levelUp(int xp, int round) {
+        int upLv = (getLevel() + 1);
+        int dodgeUp = (int) (round / 2 + getDodge());
+        int strengthUp = (int) (round / 2 + getStrength());
+        int hpUp = (int) (round + 6 + getVitality());
+        int xpUp = (int) (round / 2 + 10 + getExp());
+        
+        if(getExpGain() > getExp()) {
+            int xpRemain  = (int) (getExpGain() - getExp());
+            
+            setExpGain(xpRemain);
+            setExp(xpUp);
+            setLevel(upLv);
+            setDodge(dodgeUp);
+            setStrength(strengthUp);
+            setVitality(hpUp);
+            setHpLoss(getVitality());
+            
+            System.out.println("***********************************************************");
+            System.out.println("\t\tSeu [" + getRace() + "] avançou de level");
+            System.out.println("***********************************************************");
+            
+        } else if(getExpGain() == getExp()) {
+            setExpGain(0);
+            setExp(xpUp);
+            setLevel(upLv);
+            setDodge(dodgeUp);
+            setStrength(strengthUp);
+            setVitality(hpUp);
+            setHpLoss(getVitality());
+            
+            System.out.println("***********************************************************");
+            System.out.println("\t\tSeu [" + getRace() + "] avançou de level");
+            System.out.println("***********************************************************");
+        }
+    }  
+    
 }

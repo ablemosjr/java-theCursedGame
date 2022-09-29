@@ -1,5 +1,7 @@
 package main;
 
+import java.util.Scanner;
+
 /** AS014TSN1 - Programação Orientada à Objetos
  * AC1 (Lista) - Personagens
  * Uma desenvolvedora da games está trabalhando em um jogo de RPG. 
@@ -23,7 +25,7 @@ package main;
  * (1.0) Encapsulamento bem feito.
  * (0.5) Crie instancias dessas classes e altere seus dados e teste seus métodos.
  * (0.5) Validações quando necessárias.
- * (Opcional) Faça um personagem atacar outro.1
+ * (Opcional) Faça um personagem atacar outro.
  * 
  * @author Alessandro Bonfilio de Lemos Junior - RA 1601018
  * @since 22/09/2022
@@ -31,7 +33,32 @@ package main;
 
 public class Menu {
     public static void main(String[] args) {
-        Game.gameView();
-        
+        try {
+            Scanner in = new Scanner(System.in);
+
+            int play = 1;
+            int record = 0;
+
+            while(play == 1) {
+                int score = Game.gameView();
+
+                System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                System.out.println("\t Você chegou a [ " + score + " ] pontos!");
+
+                if(score > record) {
+                    record = score;
+                }
+
+                System.out.println("\t RECORDE ATUAL: " + record + " pontos");
+                System.out.println("\n\t ~~ * * FIM DE JOGO! * * ~ ~");
+                System.out.println("    Deseja continuar? [1] - SIM, [2] - NÃO");
+                play = in.nextInt();
+            }
+        } catch(Exception e) {
+            System.err.println("[The Cursed Game] está inativo.");
+            
+            System.out.println("Entrar em contato com equipe de Dev's!" + 
+                "\nObrigado pela compreensão.");
+        }
     }
 }
