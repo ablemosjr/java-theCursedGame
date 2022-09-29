@@ -16,8 +16,12 @@ public class Game {
     
     private static int choiceView() { 
         Scanner sc = new Scanner(System.in);
+        boolean insertValidChoice = false;
+        int option = 0;
         
-        System.out.println("===========================================================");
+        while(!insertValidChoice) {
+        
+        System.out.println("\n===========================================================");
         System.out.println("|                     The Cursed Game                     |");
         System.out.println("===========================================================\n");
         
@@ -27,7 +31,19 @@ public class Game {
         System.out.println("[3] - Arqueiro  [45 HP / 30 AGI / 20 DODGE]");
         System.out.println("Opção: ");
         
-        return sc.nextInt();
+        try{
+            option = sc.nextInt();
+            
+            if(option == 1 || option == 2 || option == 3) {
+                insertValidChoice = true;
+            } else {
+                throw new Exception("\nOpção inválida, tente novamente.");
+            }
+        } catch(Exception e) {
+            System.err.println("\nOpção inválida, tente novamente.");
+            }
+        }
+        return option;
     }
     
     protected static int gameView() {
@@ -266,34 +282,63 @@ public class Game {
     
     private static int playerSkill(int choice) {
         Scanner sc = new Scanner(System.in);
+        boolean insertValidChoice = false;
+        int option = 0;
         
-        System.out.println("========================ATAQUE=============================");
-        
-        switch (choice) {
-            case 1:
-                System.out.println("[1] - Ataque básico");
-                System.out.println("[2] - Golpe fulminante");
-                System.out.println("[3] - Descansar");
-                System.out.println("Opção: ");
-                return sc.nextInt();
-            case 2:
-                System.out.println("[1] - Ataque básico mágico");
-                System.out.println("[2] - Bola de Fogo");
-                System.out.println("[3] - Descansar");
-                System.out.println("[4] - Cura");
-                System.out.println("Opção: ");
-                return sc.nextInt();
-            case 3:
-                System.out.println("[1] - Flechada");
-                System.out.println("[2] - Tiro Preciso");
-                System.out.println("[3] - Descansar");
-                System.out.println("Opção: ");
-                return sc.nextInt();
-            default:
-                System.out.println("Algum erro ocorreu aqui!!");
-                break;
+        while(!insertValidChoice) {
+            System.out.println("========================ATAQUE=============================");
+
+            switch (choice) {
+                case 1:
+                    System.out.println("[1] - Ataque básico");
+                    System.out.println("[2] - Golpe fulminante");
+                    System.out.println("[3] - Descansar");
+                    System.out.println("Opção: ");
+                    //return sc.nextInt();
+                    break;
+                case 2:
+                    System.out.println("[1] - Ataque básico mágico");
+                    System.out.println("[2] - Bola de Fogo");
+                    System.out.println("[3] - Descansar");
+                    System.out.println("[4] - Cura");
+                    System.out.println("Opção: ");
+                    //return sc.nextInt();
+                    break;
+                case 3:
+                    System.out.println("[1] - Flechada");
+                    System.out.println("[2] - Tiro Preciso");
+                    System.out.println("[3] - Descansar");
+                    System.out.println("Opção: ");
+                    //return sc.nextInt();
+                    break;
+                default:
+                    System.out.println("Algum erro ocorreu aqui!!");
+                    break;
+            }
+            
+            try{
+                option = sc.nextInt();
+                
+                if(choice == 1 || choice == 3) {
+                    if(option == 1 || option == 2 || option == 3) {
+                        insertValidChoice = true;
+                } else  {
+                    throw new Exception("\nOpção inválida, tente novamente.");
+                    }
+                } else if(choice == 2) {
+                    if(option == 1 || option == 2 || option == 3 || option == 4) {
+                        insertValidChoice = true;
+                    } else  {
+                        throw new Exception("\nOpção inválida, tente novamente.");
+                    }
+                } else {
+                    throw new Exception("\nOpção inválida, tente novamente.");
+                }
+            } catch(Exception e) {
+                System.err.println("\nOpção inválida, tente novamente.");
+            }
         }
-        return 0;
+        return option;
     }
  
     private static void playerUp(Warrior warrior, Mage mage, Archer archer, int choice, int round) {

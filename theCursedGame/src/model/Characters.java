@@ -1,6 +1,7 @@
 package model;
 
 import java.util.Random;
+import model.errors.invalidNameException;
 
 /** Classe de construção dos personagens
  * 
@@ -62,7 +63,13 @@ public abstract class Characters {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name) throws invalidNameException {
+        name = name.trim();
+        
+        if(name == "" || name == null) {
+            throw new invalidNameException(name);
+        }
+        
         this.name = name;
     }
 

@@ -33,24 +33,32 @@ import java.util.Scanner;
 
 public class Menu {
     public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
-        int play = 1;
-        int record = 0;
-        
-        while(play == 1) {
-            int score = Game.gameView();
-            
-            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-            System.out.println("\t Você chegou a [ " + score + " ] pontos!");
-            
-            if(score > record) {
-                record = score;
+        try {
+            Scanner in = new Scanner(System.in);
+
+            int play = 1;
+            int record = 0;
+
+            while(play == 1) {
+                int score = Game.gameView();
+
+                System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                System.out.println("\t Você chegou a [ " + score + " ] pontos!");
+
+                if(score > record) {
+                    record = score;
+                }
+
+                System.out.println("\t RECORDE ATUAL: " + record + " pontos");
+                System.out.println("\n\t ~~ * * FIM DE JOGO! * * ~ ~");
+                System.out.println("    Deseja continuar? [1] - SIM, [2] - NÃO");
+                play = in.nextInt();
             }
+        } catch(Exception e) {
+            System.err.println("[The Cursed Game] está inativo.");
             
-            System.out.println("\t RECORDE ATUAL: " + record + " pontos");
-            System.out.println("\n\t ~~ * * FIM DE JOGO! * * ~ ~");
-            System.out.println("    Deseja continuar? [1] - SIM, [2] - NÃO");
-            play = in.nextInt();
+            System.out.println("Entrar em contato com equipe de Dev's!" + 
+                "\nObrigado pela compreensão.");
         }
     }
 }
