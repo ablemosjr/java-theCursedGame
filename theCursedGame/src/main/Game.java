@@ -1,9 +1,7 @@
 package main;
 
-import java.util.Random;
 import java.util.Scanner;
 import model.Archer;
-import model.Characters;
 import model.Mage;
 import model.Monsters;
 import model.Warrior;
@@ -18,18 +16,34 @@ public class Game {
     
     private static int choiceView() { 
         Scanner sc = new Scanner(System.in);
+        boolean insertValidChoice = false;
+        int option = 0;
         
-        System.out.println("===========================================================");
+        while(!insertValidChoice) {
+        
+        System.out.println("\n===========================================================");
         System.out.println("|                     The Cursed Game                     |");
         System.out.println("===========================================================\n");
         
         System.out.println("Escolha seu personagem:\n");
-        System.out.println("[1] - Guerreiro [50 HP / 10 STR / 10 DODGE]");
-        System.out.println("[2] - Mago      [20 HP / 30 WIS / 5 DODGE / 10 HEALING]");
-        System.out.println("[3] - Arqueiro  [30 HP / 30 AGI / 20 DODGE]");
+        System.out.println("[1] - Guerreiro [70 HP / 10 STR / 10 DODGE]");
+        System.out.println("[2] - Mago      [40 HP / 30 WIS / 5 DODGE / 10 HEALING]");
+        System.out.println("[3] - Arqueiro  [45 HP / 30 AGI / 20 DODGE]");
         System.out.println("Opção: ");
         
-        return sc.nextInt();
+        try{
+            option = sc.nextInt();
+            
+            if(option == 1 || option == 2 || option == 3) {
+                insertValidChoice = true;
+            } else {
+                throw new Exception("\nOpção inválida, tente novamente.");
+            }
+        } catch(Exception e) {
+            System.err.println("\nOpção inválida, tente novamente.");
+            }
+        }
+        return option;
     }
     
     protected static int gameView() {
@@ -44,13 +58,13 @@ public class Game {
         Mage mage = new Mage(name);
         Archer archer = new Archer(name);
 
-        battle(warrior, mage, archer, choice);
+        int score = battle(warrior, mage, archer, choice);
         
-        return 0;
+        return score;
     }
     
     private static int battle(Warrior warrior, Mage mage, Archer archer, int choice) {
-        int round = 1;
+        int round = 0;
         
         while(hpDecision(warrior, mage, archer, choice)) {
             
@@ -64,6 +78,7 @@ public class Game {
                 
                 int chosenSkill = playerSkill(choice);
                 
+                System.out.println("-----------------------------------------------------------");
                 switch (choice) {
                     case 1:
                         switch (chosenSkill) {
@@ -167,23 +182,45 @@ public class Game {
                         System.out.println("Opção inválida");
                         break;
                 }
+                
             if(monster.getHpLoss() > 0) {
                 switch (choice) {
                     case 1:
-                        warrior.setHpLoss(warrior.getHpLoss() - monster.monsterAttack(monster));
+                         warrior.hurt(monster);           
                         break;
                     case 2:
-                        mage.setHpLoss(mage.getHpLoss() - monster.monsterAttack(monster));
+                        mage.hurt(monster);
                         break;
                     case 3:
-                        archer.setHpLoss(archer.getHpLoss() - monster.monsterAttack(monster));
+                        archer.hurt(monster);
                         break;
                     default:
                         throw new AssertionError();
                     }
                 } else {
-                    System.out.println("Inimigo derrotado!");
+                    switch (choice) {
+                        case 1:
+                            int warriorXp = (int) (warrior.getExpGain() + monster.getExp());
+                            warrior.setExpGain(warriorXp);
+                            break;
+                        case 2:
+                            int mageXp = (int) (mage.getExpGain() + monster.getExp());
+                            mage.setExpGain(mageXp);
+                            break;
+                        case 3:
+                            int archerXp = (int) (archer.getExpGain() + monster.getExp());
+                            archer.setExpGain(archerXp);
+                            break;
+                        default:
+                            throw new AssertionError();
+                    }
+
+                    System.out.println("[" + monster.getName() + "] derrotado!");
+
+                    playerUp(warrior, mage, archer, choice, round);
                 }
+            
+                System.out.println("-----------------------------------------------------------");
             }
             round++;
         }
@@ -212,7 +249,6 @@ public class Game {
                         "\nLevel: " + warrior.getLevel() + "\t XP: " + warrior.getExpGain() + " / "+ warrior.getExp() +
                         "\nEsquiva: " + warrior.getDodge() +
                         "\nFor: " + warrior.getStrength());
-                System.out.println("-----------------------------------------------------------");
                 break;
             case 2:
                 System.out.println("========================JOGADOR============================");
@@ -222,7 +258,6 @@ public class Game {
                         "\nEsquiva: " + mage.getDodge() +
                         "\nWis: " + mage.getWisdom() + 
                         "\nInt: " + mage.getInteligence());
-                System.out.println("-----------------------------------------------------------");
                 break;
             case 3:
                 System.out.println("========================JOGADOR============================");
@@ -231,7 +266,6 @@ public class Game {
                         "\nLevel: " + archer.getLevel() + "\t XP: " + archer.getExpGain() + " / "+ archer.getExp() +
                         "\nEsquiva: " + archer.getDodge() +
                         "\nFor: " + archer.getAgility());
-                System.out.println("-----------------------------------------------------------");
                 break;
             default:
                 throw new AssertionError();
@@ -240,43 +274,87 @@ public class Game {
     
     private static void monsterStats(Monsters monster, int round) {
         System.out.println("========================INIMIGO============================");
-        System.out.println("\t\t\t Round: " + round);
+        System.out.println("\t\t\t Round: " + (round + 1));
         System.out.println("Monstro: " + monster.getName() +
                 "\nHP: " + monster.getHpLoss() + " / " + monster.getVitality() + 
                 "\nXP Obtida: " + monster.getExp());
-        System.out.println("-----------------------------------------------------------");
     }
     
     private static int playerSkill(int choice) {
         Scanner sc = new Scanner(System.in);
+        boolean insertValidChoice = false;
+        int option = 0;
         
-        System.out.println("========================ATAQUE=============================");
-        
-        switch (choice) {
-            case 1:
-                System.out.println("[1] - Ataque básico");
-                System.out.println("[2] - Golpe fulminante");
-                System.out.println("[3] - Descansar");
-                System.out.println("Opção: ");
-                return sc.nextInt();
-            case 2:
-                System.out.println("[1] - Ataque básico mágico");
-                System.out.println("[2] - Bola de Fogo");
-                System.out.println("[3] - Descansar");
-                System.out.println("[4] - Cura");
-                System.out.println("Opção: ");
-                return sc.nextInt();
-            case 3:
-                System.out.println("[1] - Flechada");
-                System.out.println("[2] - Tiro Preciso");
-                System.out.println("[3] - Descansar");
-                System.out.println("Opção: ");
-                return sc.nextInt();
-            default:
-                System.out.println("Algum erro ocorreu aqui!!");
-                break;
+        while(!insertValidChoice) {
+            System.out.println("========================ATAQUE=============================");
+
+            switch (choice) {
+                case 1:
+                    System.out.println("[1] - Ataque básico");
+                    System.out.println("[2] - Golpe fulminante");
+                    System.out.println("[3] - Descansar");
+                    System.out.println("Opção: ");
+                    //return sc.nextInt();
+                    break;
+                case 2:
+                    System.out.println("[1] - Ataque básico mágico");
+                    System.out.println("[2] - Bola de Fogo");
+                    System.out.println("[3] - Descansar");
+                    System.out.println("[4] - Cura");
+                    System.out.println("Opção: ");
+                    //return sc.nextInt();
+                    break;
+                case 3:
+                    System.out.println("[1] - Flechada");
+                    System.out.println("[2] - Tiro Preciso");
+                    System.out.println("[3] - Descansar");
+                    System.out.println("Opção: ");
+                    //return sc.nextInt();
+                    break;
+                default:
+                    System.out.println("Algum erro ocorreu aqui!!");
+                    break;
+            }
+            
+            try{
+                option = sc.nextInt();
+                
+                if(choice == 1 || choice == 3) {
+                    if(option == 1 || option == 2 || option == 3) {
+                        insertValidChoice = true;
+                } else  {
+                    throw new Exception("\nOpção inválida, tente novamente.");
+                    }
+                } else if(choice == 2) {
+                    if(option == 1 || option == 2 || option == 3 || option == 4) {
+                        insertValidChoice = true;
+                    } else  {
+                        throw new Exception("\nOpção inválida, tente novamente.");
+                    }
+                } else {
+                    throw new Exception("\nOpção inválida, tente novamente.");
+                }
+            } catch(Exception e) {
+                System.err.println("\nOpção inválida, tente novamente.");
+            }
         }
-        return 0;
+        return option;
     }
  
+    private static void playerUp(Warrior warrior, Mage mage, Archer archer, int choice, int round) {
+        switch (choice) {
+            case 1:
+                warrior.levelUp((int) warrior.getExpGain(), round);
+                break;
+            case 2:
+                mage.levelUp((int) mage.getExpGain(), round);
+                break;
+            case 3:
+                archer.levelUp((int) archer.getExpGain(), round);
+                break;
+            default:
+                throw new AssertionError();
+        }
+    }
+    
 }

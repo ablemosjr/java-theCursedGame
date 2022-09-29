@@ -38,20 +38,22 @@ public class Monsters {
                 break;
             case 2:
                 setName("Orc");
-                setVitality(80);
+                setVitality(60);
                 setHpLoss(getVitality());
                 setStrength(5);
                 setExp(15);
                 break;
         }
         
-        if(round != 1) {
-            int hpMonsterUp = (int) getVitality() + (round * 2);
+        if(round > 1) {
+            int hpMonsterUp = (int) getVitality() + (round * 2 + 4);
             int xpMonsterUp = (int) getExp() + (round * 2);
+            int strMonsterUp = (int) (getStrength() + round / 2 + 2);
             
             setVitality(hpMonsterUp);
             setHpLoss(hpMonsterUp);
             setExp(xpMonsterUp);
+            setStrength(strMonsterUp);
         }
     }
     
@@ -59,14 +61,14 @@ public class Monsters {
         Random randomAttack = new Random();
         int attack = randomAttack.nextInt(2) + 1;
         int dmgCritic = (int) (monster.getStrength() * 2);
-
+ 
         if(monster.getName().equals("Goblin")) {
             switch (attack) {
                 case 1:
-                    System.out.println("Goblin atacou " + (int) monster.getStrength());
+                    System.out.println("[Goblin] atacou com porrete, causou [" + (int) monster.getStrength() + "] de dano");
                     return (int) monster.getStrength();
                 case 2:
-                    System.out.println("Goblin atacou e critou " + dmgCritic);
+                    System.out.println("[Goblin] pulou e mordeu seu pescoço, causou [" + dmgCritic + "] de dano");
                     return (int) dmgCritic;
                 default:
                     throw new AssertionError();
@@ -74,10 +76,10 @@ public class Monsters {
         } else if(monster.getName().equals("Orc")) {
             switch (attack) {
                 case 1:
-                    System.out.println("Orc atacou " + (int) monster.getStrength());
+                    System.out.println("[Orc] acertou um gancho de direita, causando [" + (int) monster.getStrength() + "] de dano");
                     return (int) monster.getStrength();
                 case 2:
-                    System.out.println("Orc atacou e critou " + dmgCritic);
+                    System.out.println("[Orc] acertou um chute nas costelas, causou [" + dmgCritic + "] de dano");
                     return (int) dmgCritic;
                 default:
                     throw new AssertionError();
@@ -86,10 +88,6 @@ public class Monsters {
         return 0;
     }
     
-    public void monsterUp() {
-        
-    }
-
     public String getName() {
         return name;
     }
